@@ -1,10 +1,17 @@
 import React from "react";
-import { usePage, Head, Link } from "@inertiajs/react";  // ใช้ Link แทน InertiaLink
+import { usePage, Head, Link, router } from "@inertiajs/react";  // ใช้ Link และ router จาก Inertia
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Card, CardContent } from "../../components/ui/card";
 
 export default function Show() {
     const { booking } = usePage().props;
+
+    // ฟังก์ชันสำหรับการลบการจอง
+    const handleDelete = () => {
+        if (confirm("Are you sure you want to delete this booking?")) {
+            router.delete(`/booking/${booking.id}`);
+        }
+    };
 
     return (
         <AuthenticatedLayout>
@@ -28,6 +35,14 @@ export default function Show() {
                         >
                             Edit
                         </Link>
+
+                        {/* ปุ่มลบ */}
+                        <button
+                            onClick={handleDelete}
+                            className="mt-4 ml-2 inline-block bg-red-500 text-white py-2 px-4 rounded"
+                        >
+                            Delete
+                        </button>
                     </CardContent>
                 </Card>
             </div>

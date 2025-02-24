@@ -37,12 +37,18 @@ Route::middleware('auth')->group(function () {
     // หน้าแสดงรายละเอียดการจอง
     Route::get('/booking-details/{id}', [ReservationsController::class, 'show'])->name('booking.details');
 
-
     // หน้าสร้างการจอง
     Route::get('/create', [CreateController::class, 'showCreateForm'])->name('create');
 
     // API สำหรับการจอง
     Route::post('/reserve-table', [ReservationsController::class, 'reserveTable']);
+
+    // เส้นทางที่เพิ่มขึ้นสำหรับการแก้ไขข้อมูลการจอง
+    Route::get('/booking/{id}/edit', [ReservationsController::class, 'edit'])->name('booking.edit');
+    Route::put('/booking/{id}', [ReservationsController::class, 'update'])->name('booking.update');
+
+    // เส้นทางลบการจอง
+    Route::delete('/booking/{id}', [ReservationsController::class, 'destroy'])->name('booking.destroy');
 });
 
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
@@ -50,12 +56,6 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::delete('/admin/delete/{id}', [AdminController::class, 'deleteReservation'])->name('admin.delete');
     Route::get('/admin/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');
     Route::post('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
-});
-
-Route::middleware('auth')->group(function () {
-    // เส้นทางที่เพิ่มขึ้นสำหรับการแก้ไขข้อมูลการจอง
-    Route::get('/booking/{id}/edit', [ReservationsController::class, 'edit'])->name('booking.edit');
-    Route::put('/booking/{id}', [ReservationsController::class, 'update'])->name('booking.update');
 });
 
 require __DIR__ . '/auth.php';

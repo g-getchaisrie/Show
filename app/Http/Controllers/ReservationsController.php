@@ -127,5 +127,32 @@ class ReservationsController extends Controller
             return redirect()->route('booking.edit', $id)->withErrors(['error' => 'เกิดข้อผิดพลาดในการอัปเดตข้อมูลการจอง']);
         }
     }
+
+    public function destroy($id)
+    {
+        DB::beginTransaction(); // ใช้ transaction เพื่อป้องกันข้อมูลผิดพลาด
+
+        try {
+            // ค้นหาการจองที่ต้องการลบ
+            $reservation = Reservations::findOrFail($id);
+
+            // อัปเดตสถานะโต๊ะให้กลับมาว่าง
+            Tables::where('id', $reservation->table_id)->update([
+                'available' => true,
+                'reserved_by_user_id' => null,
+            ]);
+
+            // ลบการจอง
+            $reservation->delete();
+
+            DB::commit(); // ยืนยันการทำธุรกรรม
+
+            return redirect()->route('reserve.index')->with('success', 'ลบการจองสำเร็จ!');
+        } catch (\Exception $e) {
+            DB::rollBack(); // ยกเลิกการทำธุรกรรมหากเกิดข้อผิดพลาด
+            Log::error('Delete Reservation Error: ' . $e->getMessage());
+            return redirect()->route('reserve.index')->withErrors(['error' => 'เกิดข้อผิดพลาดในการลบการจอง']);
+        }
+    }
 }
 
