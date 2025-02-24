@@ -64,10 +64,11 @@ class ReservationsController extends Controller
     public function edit($id)
     {
         $booking = Reservations::findOrFail($id);
-
+        $tables = Tables::all();
         return Inertia::render('Shabu/Edit', [
             'booking' => $booking,
-            'tables' => Tables::where('available', true)->get() // ข้อมูลโต๊ะที่ว่าง
+            'tables' => $tables,
+            'csrf_token' => csrf_token(), // Add this line
         ]);
     }
 
