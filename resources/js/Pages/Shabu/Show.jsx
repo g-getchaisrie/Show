@@ -1,5 +1,5 @@
 import React from "react";
-import { usePage, Head } from "@inertiajs/react";
+import { usePage, Head, Link } from "@inertiajs/react";  // ใช้ Link แทน InertiaLink
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Card, CardContent } from "../../components/ui/card";
 
@@ -20,6 +20,14 @@ export default function Show() {
                         <p className="text-sm">Phone: {booking.phone}</p>
                         <p className="text-sm">Reserved At: {new Date(booking.reserved_at).toLocaleString()}</p>
                         <p className="text-sm">Expires At: {new Date(booking.expires_at).toLocaleString()}</p>
+
+                        {/* ปุ่มแก้ไข */}
+                        <Link
+                            href={`/booking/${booking.id}/edit`}
+                            className="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded"
+                        >
+                            Edit
+                        </Link>
                     </CardContent>
                 </Card>
             </div>

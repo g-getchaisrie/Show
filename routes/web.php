@@ -52,4 +52,11 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::post('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
 });
 
+Route::middleware('auth')->group(function () {
+    // เส้นทางที่เพิ่มขึ้นสำหรับการแก้ไขข้อมูลการจอง
+    Route::get('/booking/{id}/edit', [ReservationsController::class, 'edit'])->name('booking.edit');
+    Route::put('/booking/{id}', [ReservationsController::class, 'update'])->name('booking.update');
+});
+
 require __DIR__ . '/auth.php';
+
